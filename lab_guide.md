@@ -302,7 +302,7 @@ La tabla <catalogo>.oro.fct_com_var_volumen_ctv no cuadra con el archivo /Volume
 
    El arreglo `VARS=( ... )` funciona igual en bash y en zsh, la terminal por defecto de macOS.
 
-   Probé estos tres comandos desde zsh el 9 de noviembre: con la ETL de referencia, el job termina en `SUCCESS` y la aceptación da `PASA` en 4 de 4 escenarios.
+   Probé estos tres comandos desde zsh el 10 de noviembre, en mi cuenta de Free Edition: con la ETL de referencia, el job termina en `SUCCESS` y la aceptación da `PASA` en 4 de 4 escenarios.
 
 3. Vean fallar la compuerta de dos formas:
    - **Otra fecha de corte (E5).** Corran `databricks bundle run etl_con_aceptacion "${VARS[@]}" --params g_fecha=20260828 --profile <perfil>`. La ETL corre bien, pero la tarea `aceptacion` falla con `NO COMPARABLE`, porque el esperado no tiene filas con esa fecha de corte.
@@ -311,7 +311,7 @@ La tabla <catalogo>.oro.fct_com_var_volumen_ctv no cuadra con el archivo /Volume
 
 **Resultado esperado.** El job pasa con la ETL corregida y falla en los dos casos del paso 3. `bundle run` devuelve error cuando el job termina en `FAILED`, así que en un pipeline de Azure DevOps la promoción se detiene sola ([Azure DevOps](https://docs.databricks.com/aws/en/dev-tools/ci-cd/azure-devops)). Las dos tareas van sin reintentos, así que cada falla aparece una sola vez.
 
-**Cómo saber que salió bien.** Tienen una corrida `SUCCESS` y dos `FAILED` del mismo job: una en `aceptacion` con `NO COMPARABLE` y otra en `etl`.
+**Cómo saber que salió bien.** Tienen una corrida `SUCCESS` y dos `FAILED` del mismo job: una en `aceptacion` con `NO COMPARABLE` y otra en `etl`. La CLI reporta cada falla como `INTERNAL_ERROR: Task <tarea> failed`, y en Jobs la corrida queda como `Failed`.
 
 **Para limpiar.** `databricks bundle destroy "${VARS[@]}" --profile <perfil>` borra el job y su carpeta `.bundle` en el workspace.
 

@@ -51,7 +51,15 @@ Esta es la variante para **Databricks Free Edition**, con una cuenta gratuita po
 
 ## Qué está probado
 
-Instalé y corrí el laboratorio primero en un workspace de Azure Databricks con serverless, el 9 y el 10 de noviembre de 2026:
+En mi cuenta de Free Edition, el 10 de noviembre de 2026, desde un Git folder de este repositorio clonado sin credenciales de Git:
+
+- El setup creó el catálogo `cx_postobon_sdd_workshop_glux` y cargó los datos sintéticos en 107 s.
+- Las 3 ETL de referencia pasan el linter y la aceptación, 4 de 4 escenarios, y la tabla sembrada da `NO COMPARABLE`, como espera el Lab 3.
+- El Lab 0 con todo en `si`, sobre el catálogo ya creado, terminó en 60 s e instaló en mi usuario la constitución v2, las 4 skills v2 y el `AGENTS.md`.
+- El camino del participante: la ETL del Lab 4 muestra sus 5 errores como se diseñaron, y corregida da `PASA` con 48 filas.
+- El bundle del Lab 5, desplegado y corrido desde zsh: pasa con la ETL correcta, falla en `aceptacion` con otra fecha de corte y falla en `etl` con la ETL del Lab 4, que trae un `%` suelto.
+
+Antes lo había instalado y corrido en un workspace de Azure Databricks con serverless, el 9 y el 10 de noviembre de 2026:
 
 - Las 3 ETL de referencia pasan el linter y la aceptación, 4 de 4 escenarios.
 - El camino del participante, desde una copia de `lab/` en el workspace: setup, controles y la ETL del Lab 4, cuyos 5 errores aparecen como se diseñaron.
@@ -62,7 +70,7 @@ Instalé y corrí el laboratorio primero en un workspace de Azure Databricks con
 
 Lo que todavía no probé:
 
-- Clonar sin credenciales de Git: mi usuario tiene una credencial de GitHub configurada. La documentación dice que un repositorio público se clona sin ellas ([Git folders](https://docs.databricks.com/aws/en/repos/repos-setup)).
+- Los prompts de los Labs 1 a 4 con Genie Code en Free Edition. Los corrí en Azure con el job del experimento, que se crea desde la interfaz de Jobs.
 
 La comparación de v1 contra v2 está en [`resultados_experimento.md`](resultados_experimento.md). En el entorno sintético, v2 no mejoró el resultado: las dos variantes resolvieron casi lo mismo al primer intento, y v2 dejó más evidencia escrita por scripts y tardó más.
 
