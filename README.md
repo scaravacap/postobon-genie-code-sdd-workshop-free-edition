@@ -56,6 +56,7 @@ En mi cuenta de Free Edition, el 10 de noviembre de 2026, desde un Git folder de
 - El setup creó el catálogo `cx_postobon_sdd_workshop_glux` y cargó los datos sintéticos en 107 s.
 - Las 3 ETL de referencia pasan el linter y la aceptación, 4 de 4 escenarios, y la tabla sembrada da `NO COMPARABLE`, como espera el Lab 3.
 - El Lab 0 con todo en `si`, sobre el catálogo ya creado, terminó en 60 s e instaló en mi usuario la constitución v2, las 4 skills v2 y el `AGENTS.md`.
+- El prompt de verificación del Lab 0, en un chat nuevo de Genie Code: lista las 4 skills v2 y las instrucciones v2 con el adaptador del taller.
 - El camino del participante: la ETL del Lab 4 muestra sus 5 errores como se diseñaron, y corregida da `PASA` con 48 filas.
 - El bundle del Lab 5, desplegado y corrido desde zsh: pasa con la ETL correcta, falla en `aceptacion` con otra fecha de corte y falla en `etl` con la ETL del Lab 4, que trae un `%` suelto.
 
