@@ -1,0 +1,68 @@
+# Bundle mínimo: el ETL y su aceptación como un solo job.
+# La tarea de aceptación falla si el resultado no es PASA, así que un ETL que no cuadra
+# no queda como corrida exitosa y no se promueve. Es un control fuera del agente.
+#
+# Validar (solo lectura):  databricks bundle validate --strict --profile <perfil>
+# Desplegar en el taller:  databricks bundle deploy --profile <perfil>   (opcional, Lab 5)
+
+bundle:
+  name: postobon_sdd_aceptacion
+
+variables:
+  entorno:
+    description: Prefijo del catálogo. El catálogo es <entorno>_glux.
+    default: cx_postobon_sdd_workshop
+  notebook_etl:
+    description: Ruta en el workspace del notebook DLKH_01_<NOMBRE>.
+    default: /Workspace/Users/${workspace.current_user.userName}/postobon_sdd_workshop/databricks/notebooks/DLKHNB_ORO/DLKHTIPO_HECHOS/DLKHID_FCT_COM_VAR_DROPSIZE/DLKH_01_FCT_COM_VAR_DROPSIZE
+  tabla:
+    default: ${var.entorno}_glux.oro.fct_com_var_dropsize
+  esperado:
+    default: /Volumes/${var.entorno}_glux/taller/archivos/esperados/fct_com_var_dropsize_20260831.csv
+  llaves:
+    default: cd_planta,cd_registro_nomina
+  columnas_valor:
+    default: vl_venta_total,nm_pedidos,vl_dropsize
+  fecha_corte:
+    default: "20260831"
+
+resources:
+  jobs:
+    etl_con_aceptacion:
+      name: etl_con_aceptacion_${bundle.target}
+      parameters:
+        - name: g_fecha
+          default: ${var.fecha_corte}
+      # Sin reintentos: en serverless, la autooptimización reintenta sola una tarea fallida,
+      # y una aceptación que no pasa tiene que fallar una sola vez.
+      tasks:
+        - task_key: etl
+          max_retries: 0
+          disable_auto_optimization: true
+          notebook_task:
+            notebook_path: ${var.notebook_etl}
+            source: WORKSPACE
+            base_parameters:
+              g_fecha: "{{job.parameters.g_fecha}}"
+              id_pipeline: bundle_${bundle.target}
+        - task_key: aceptacion
+          depends_on:
+            - task_key: etl
+          max_retries: 0
+          disable_auto_optimization: true
+          notebook_task:
+            notebook_path: ./verificacion_aceptacion.py
+            base_parameters:
+              tabla: ${var.tabla}
+              esperado: ${var.esperado}
+              llaves: ${var.llaves}
+              columnas_valor: ${var.columnas_valor}
+              fecha_corte: "{{job.parameters.g_fecha}}"
+              columna_fecha: dt_corte
+              tolerancia: "0.01"
+              fallar_si_no_pasa: si
+
+targets:
+  dev:
+    default: true
+    mode: development

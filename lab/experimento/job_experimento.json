@@ -1,0 +1,62 @@
+{
+  "name": "taller_sdd_experimento",
+  "max_concurrent_runs": 1,
+  "queue": {
+    "enabled": true
+  },
+  "tags": {
+    "taller": "postobon_sdd"
+  },
+  "parameters": [
+    {
+      "name": "prompt_id",
+      "default": "CANARY"
+    },
+    {
+      "name": "variante",
+      "default": "v1"
+    },
+    {
+      "name": "prompt",
+      "default": ""
+    }
+  ],
+  "tasks": [
+    {
+      "task_key": "reset_escenario",
+      "timeout_seconds": 3600,
+      "notebook_task": {
+        "notebook_path": "/Workspace/Users/@USUARIO@/postobon_sdd_experimento/10_reset_escenario",
+        "source": "WORKSPACE",
+        "base_parameters": {
+          "prompt_id": "{{job.parameters.prompt_id}}",
+          "variante": "{{job.parameters.variante}}"
+        }
+      },
+      "max_retries": 0,
+      "disable_auto_optimization": true
+    },
+    {
+      "task_key": "evaluar",
+      "depends_on": [
+        {
+          "task_key": "reset_escenario"
+        }
+      ],
+      "run_if": "ALL_DONE",
+      "timeout_seconds": 3600,
+      "notebook_task": {
+        "notebook_path": "/Workspace/Users/@USUARIO@/postobon_sdd_experimento/20_evaluar_corrida",
+        "source": "WORKSPACE",
+        "base_parameters": {
+          "prompt_id": "{{job.parameters.prompt_id}}",
+          "variante": "{{job.parameters.variante}}",
+          "respuesta": "",
+          "run_id": "{{job.run_id}}"
+        }
+      },
+      "max_retries": 0,
+      "disable_auto_optimization": true
+    }
+  ]
+}
